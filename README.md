@@ -1,15 +1,58 @@
-# Getting_Cleaning_Data
+# Description
 
+The requirements are:
+ - Merges the training and the test sets to create one data set.
+ - Extracts only the measurements on the mean and standard deviation for each measurement
+ - Uses descriptive activity names to name the activities in the data set
+ - Appropriately labels the data set with descriptive activity names. 
+ - Creates a second, independent tidy data set with the average of each variable for each activity and each subject.
+ 
+## Functions
+ 
+`merge_data` which will handle the the 1st, 3rd, and 4th requirements
+`extract_mean_std` which will handle the 2nd, 3rd, and 4th requirements
+`melt_data_and_write_tidy_set` which will handle the 5th requirement and write out the tidy set file
 
-## Course Project
+A helper function `read_tidy_set` is provided to read the generated tidy_set inside R.
 
-(find all project-related materials in the UCI HAR Dataset directory, however, copies of the important files have been put into this main directory to fulfill the submission requirement)
+### merge_data
 
+Purpose: to merge all the data from the various text files into a single giant data table. No subset or extractions performed on the data set once merged.
+ 
+ Parameters: 
+    `directory`: a character vector that indicates the folder residing inside the working directory
+    
+ Value:
+    `all_data`: a merged data table containing training and test data and 3 additional columns for subject, activity, and activity id. This amounts to 10299 observations of 564 variables
+    
+### extract_mean_std
 
-### Unzip the source (https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip) into a folder on your local drive, say D:\yourname\Data Science\Project\GetCleanData
+ Purpose: Performs subset on the giant data set of merged data to extract just the mean and std related data
 
-Put run_analysis.R into D:\yourname\Data Science\Project\GetCleanData\UCI HAR Dataset
+ Parameters: 
+    `data_set`: a data table containing the training set and test set data and 3 additional columns for subject, activity, and activity id
+    `directory`: a character vector that indicates the folder residing inside the working directory
+    
+ Value:
+    `extracted_data_set`: after performing subset on the `data_set` parameter, this is a data table that contains just 10299 observations of 69 variables basically the same 3 additional columns of subject, activity, and activity id plus the 66 columns whose headers contain the characters `mean()` and `std()`
+    
+### melt_data_and_write_tidy_set
 
-In RStudio: setwd("D:\yourname\Data Science\Project\GetCleanData\UCI HAR Dataset\\"), followed by: source("run_analysis.R")
+ Purpose: Performs melt data, casting back to tidy data format, and then writing the data out to a text file
 
-Use data <- read.table("data_set_with_the_averages.txt") to read the data. It is 180x68 because there are 30 subjects and 6 activities, thus "for each activity and each subject" means 30 * 6 = 180 rows. Note that the provided R script has no assumptions on numbers of records, only on locations of files.
+ Parameters: 
+    `extracted_mean_std_data_set`: a data table containing the training set and test set data and 3 additional columns for subject, activity, and activity id but has already extracted out the mean and std columns
+    `path_to_tidyset_file`: a character vector that indicates the path to write the tidy set file to 
+    
+ Value:
+    nil
+    
+### read_tidy_set
+
+ Purpose: Reads the tidy set file back into data table
+
+ Parameters: 
+    `path_to_tidyset_file`: a character vector that indicates the path to the tidy set file
+    
+ Value:
+    datatable of data inside the tidy set file
